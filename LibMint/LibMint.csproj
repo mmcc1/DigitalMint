@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LibMintModels\LibMintModels.csproj" />
-    <ProjectReference Include="..\LibMockBackend\LibMockBackend.csproj" />
   </ItemGroup>
 
 </Project>

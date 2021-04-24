@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMintModels", "LibMintMod
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MintTest", "MintTest\MintTest.csproj", "{5DC6F78F-6C01-47DD-AAD2-FC7C28C24DF7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibMockBackend", "LibMockBackend\LibMockBackend.csproj", "{539E6C01-3EF2-4A29-8D3A-01FF2AE88815}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{5DC6F78F-6C01-47DD-AAD2-FC7C28C24DF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DC6F78F-6C01-47DD-AAD2-FC7C28C24DF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5DC6F78F-6C01-47DD-AAD2-FC7C28C24DF7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{539E6C01-3EF2-4A29-8D3A-01FF2AE88815}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{539E6C01-3EF2-4A29-8D3A-01FF2AE88815}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{539E6C01-3EF2-4A29-8D3A-01FF2AE88815}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{539E6C01-3EF2-4A29-8D3A-01FF2AE88815}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
