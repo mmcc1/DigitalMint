@@ -8,6 +8,8 @@ namespace MintTest
 {
     class Program
     {
+        #region Test Keys
+
         private static string privateRSAKey = @"-----BEGIN RSA PRIVATE KEY-----
 MIIEoQIBAAKCAQBkgS5bdHmfPFhLIOdxCpd/rEC92l1WvFr3cGUfySR2TP61whCj
 PXzCkxe4vs6uCKhfoRPiKQV7a24VxNb+QRkmryTzpFlJutNhfMeiuBJRu/yrp/b7
@@ -56,18 +58,61 @@ jc6pz989OCVjHjIO3LFIqRWK3RZQGLt9e99GW7vzN21UoXsiJ9m3WojDbMU0yEqR
 AgMBAAE=
 -----END PUBLIC KEY-----";
 
+        #endregion
+
         static void Main(string[] args)
         {
-            //Issue Coin
+            Coin coin = IssueCoin();  //Create a coin
+
+            PrintCoinDetails("Coin Issued.", coin);
+            VerifyHolderHash(coin);
+            VerifyIssueHash(coin);
+
+            TransferCoin tc = new TransferCoin();
+            coin = tc.Create(CreateTransfer(coin), coin, privateRSAKey, publicRSAKey);  //Transfer
+
+            PrintCoinDetails("Transfer complete.", coin);
+
+            VerifyHolderHash(coin);
+            VerifyIssueHash(coin);
+
+            Console.ReadLine();
+        }
+
+        #region Mint Methods
+
+        private static Coin IssueCoin()
+        {
             Console.WriteLine("Issuing coin...");
             IssueCoin iC = new IssueCoin();
-            Coin coin = iC.Create("Bank of Digital", "UK", 10.00M, privateRSAKey, publicRSAKey);
+            return iC.Create("Bank of Digital", "UK", "GBP", 10.00M, privateRSAKey, publicRSAKey);
+        }
 
+        private static Transfer CreateTransfer(Coin coin)
+        {
             Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("Coin issued:");
+            Console.WriteLine("Transferring coin...");
+
+            Transfer transfer = new Transfer() { Timestamp = DateTime.UtcNow, SerialNumber = coin.SerialNumber, Holders = new List<Holder>() };
+            transfer.Holders.Add(new Holder() { PublicKey = transferPublicKey });
+            string jTransfer = JsonConvert.SerializeObject(transfer);
+            transfer.Signature = CoinTools.Sign(jTransfer, privateRSAKey);
+
+            return transfer;
+        }
+
+        #endregion
+
+        #region Helpers
+
+        private static void PrintCoinDetails(string msg, Coin coin)
+        {
+            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine(msg);
             Console.WriteLine("Issuing Authority: " + coin.IssuingAuthority);
             Console.WriteLine("Issuing Country: " + coin.CountryCode);
             Console.WriteLine("Serial Number: " + coin.SerialNumber);
+            Console.WriteLine("CurrencyCode: " + coin.CurrencyCode);
             Console.WriteLine("Value: " + coin.Value);
             Console.WriteLine("Issuing Date: " + coin.IssueDate);
             Console.WriteLine(Environment.NewLine);
@@ -76,9 +121,10 @@ AgMBAAE=
             Console.WriteLine("Holder's Public Key: " + Environment.NewLine + coin.Holders[0].PublicKey);
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("Holder Hash: " + coin.HolderHash);
+        }
 
-
-            //Verify Holder Hash
+        private static void VerifyHolderHash(Coin coin)
+        {
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("Verifying Holder Hash...");
             string hh = coin.HolderHash;
@@ -90,83 +136,34 @@ AgMBAAE=
             else
                 Console.WriteLine("Invalid Holder Hash");
 
+            coin.HolderHash = hh;
+        }
 
-            //Verify Issue Hash
+        private static void VerifyIssueHash(Coin coin)
+        {
             Console.WriteLine(Environment.NewLine);
             Console.WriteLine("Verifying Issue Hash...");
+
+            string hh = coin.HolderHash;
+            coin.HolderHash = null;
+
             Holder[] holders = coin.Holders.ToArray();
             coin.Holders.Clear();
             string hash = coin.IssuingHash;
             coin.IssuingHash = null;
-            jCoin = JsonConvert.SerializeObject(coin);
+
+            string jCoin = JsonConvert.SerializeObject(coin);
 
             if (CoinTools.Verify(jCoin, hash, publicRSAKey))
                 Console.WriteLine("Issue Hash Verified");
             else
                 Console.WriteLine("Invalid Issue Hash");
 
-
-            //Restore Coin
-            coin.Holders.AddRange(holders);
             coin.HolderHash = hh;
+            coin.Holders.AddRange(holders);
             coin.IssuingHash = hash;
-
-
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("Transferring coin...");
-
-            //Transfer Coin
-            Transfer transfer = new Transfer() { Timestamp = DateTime.UtcNow, SerialNumber = coin.SerialNumber, Holders = new List<Holder>() };
-            transfer.Holders.Add(new Holder() { PublicKey = transferPublicKey });
-            string jTransfer = JsonConvert.SerializeObject(transfer);
-            
-            transfer.Signature = CoinTools.Sign(jTransfer, privateRSAKey);
-
-            TransferCoin tc = new TransferCoin();
-            coin = tc.Create(transfer, coin, privateRSAKey, publicRSAKey);
-
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("Coin Transferred:");
-            Console.WriteLine("Issuing Authority: " + coin.IssuingAuthority);
-            Console.WriteLine("Issuing Country: " + coin.CountryCode);
-            Console.WriteLine("Serial Number: " + coin.SerialNumber);
-            Console.WriteLine("Value: " + coin.Value);
-            Console.WriteLine("Issuing Date: " + coin.IssueDate);
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("Issuing Hash: " + coin.IssuingHash);
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("Holder's Public Key: " + Environment.NewLine + coin.Holders[0].PublicKey);
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("Holder Hash: " + coin.HolderHash);
-
-            //Verify Holder Hash
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("Verifying Holder Hash...");
-            hh = coin.HolderHash;
-            coin.HolderHash = null;
-            jCoin = JsonConvert.SerializeObject(coin);
-
-            if (CoinTools.Verify(jCoin, hh, publicRSAKey))
-                Console.WriteLine("Holder Hash Verified");
-            else
-                Console.WriteLine("Invalid Holder Hash");
-
-
-            //Verify Issue Hash
-            Console.WriteLine(Environment.NewLine);
-            Console.WriteLine("Verifying Issue Hash...");
-            holders = coin.Holders.ToArray();
-            coin.Holders.Clear();
-            hash = coin.IssuingHash;
-            coin.IssuingHash = null;
-            jCoin = JsonConvert.SerializeObject(coin);
-
-            if (CoinTools.Verify(jCoin, hash, publicRSAKey))
-                Console.WriteLine("Issue Hash Verified");
-            else
-                Console.WriteLine("Invalid Issue Hash");
-
-            Console.ReadLine();
         }
+
+        #endregion
     }
 }
