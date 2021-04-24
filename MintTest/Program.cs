@@ -72,7 +72,6 @@ AgMBAAE=
             coin = tc.Create(CreateTransfer(coin), coin, privateRSAKey, publicRSAKey);  //Transfer
 
             PrintCoinDetails("Transfer complete.", coin);
-
             VerifyHolderHash(coin);
             VerifyIssueHash(coin);
 
