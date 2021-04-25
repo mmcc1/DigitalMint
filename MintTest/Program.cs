@@ -8,7 +8,8 @@ namespace MintTest
 {
     class Program
     {
-        #region Test Keys
+        /*
+        #region RSA Test Keys
 
         private static string privateRSAKey = @"-----BEGIN RSA PRIVATE KEY-----
 MIIEoQIBAAKCAQBkgS5bdHmfPFhLIOdxCpd/rEC92l1WvFr3cGUfySR2TP61whCj
@@ -48,7 +49,7 @@ fcfNA7jSKdhkgeGBkMgVcrrQLnI2VXCT6c0fsTSW7EtDfCeP10SRF1/YDZuNFSI9
 AgMBAAE=
 -----END PUBLIC KEY-----";
 
-        private static string transferPublicKey = @"-----BEGIN PUBLIC KEY-----
+        private static string transferRSAPublicKey = @"-----BEGIN PUBLIC KEY-----
 MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBqNTz1F9yp8rplV2DUBX3X
 VSbrr9iO9oDlWgvcmTpePHP+eyQe+tG6jT9yMzdXnM6WZjscpxg77mSGvo6rB/Cb
 GbD/cIGA6WtHGxlOX9O4oPxdTx3Fikse9Mq5myzyRVAghDhoF71GAV7RHcxCGH/1
@@ -59,7 +60,24 @@ AgMBAAE=
 -----END PUBLIC KEY-----";
 
         #endregion
+*/
 
+        private static string privateECKey = @"-----BEGIN EC PRIVATE KEY-----
+MHQCAQEEILLwDgKayNil3RxMTtz6isgw9p3piPjzz7EuAqghwqsLoAcGBSuBBAAK
+oUQDQgAEze2Mh0XVtkiZ03rt5L0xIcQAEfxf75qjEO8C9fbVsJh1VDuOdESkNIIf
+0YlNAz2PJ9IQ0ovDf+pM4Yt/m2Bacw==
+-----END EC PRIVATE KEY-----";
+
+        private static string publicECKey = @"-----BEGIN PUBLIC KEY-----
+MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEze2Mh0XVtkiZ03rt5L0xIcQAEfxf75qj
+EO8C9fbVsJh1VDuOdESkNIIf0YlNAz2PJ9IQ0ovDf+pM4Yt/m2Bacw==
+-----END PUBLIC KEY-----";
+
+        private static string transferECPublicKey = @"-----BEGIN PUBLIC KEY-----
+MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEHk9K8gPz1s3o0KLQPS4l3pU7qg3H50ww
+4ukkPJiao/5HLqTwowv9z0t3gMoQGnzU3tpW/BLoNwyMlLmog8wgXA==
+-----END PUBLIC KEY-----
+";
         static void Main(string[] args)
         {
             Coin coin = IssueCoin();  //Create a coin
@@ -69,7 +87,7 @@ AgMBAAE=
             VerifyIssueHash(coin);
 
             TransferCoin tc = new TransferCoin();
-            coin = tc.Create(CreateTransfer(coin), coin, privateRSAKey, publicRSAKey);  //Transfer
+            coin = tc.Create(CreateTransfer(coin), coin, privateECKey, publicECKey);  //Transfer
 
             PrintCoinDetails("Transfer complete.", coin);
             VerifyHolderHash(coin);
@@ -84,7 +102,7 @@ AgMBAAE=
         {
             Console.WriteLine("Issuing coin...");
             IssueCoin iC = new IssueCoin();
-            return iC.Create("Bank of Digital", "UK", "GBP", 10.00M, privateRSAKey, publicRSAKey);
+            return iC.Create("Bank of Digital", "UK", "GBP", 10.00M, privateECKey, publicECKey);
         }
 
         private static Transfer CreateTransfer(Coin coin)
@@ -93,9 +111,9 @@ AgMBAAE=
             Console.WriteLine("Transferring coin...");
 
             Transfer transfer = new Transfer() { Timestamp = DateTime.UtcNow, SerialNumber = coin.SerialNumber, Holders = new List<Holder>() };
-            transfer.Holders.Add(new Holder() { PublicKey = transferPublicKey });
+            transfer.Holders.Add(new Holder() { PublicKey = transferECPublicKey });
             string jTransfer = JsonConvert.SerializeObject(transfer);
-            transfer.Signature = CoinTools.Sign(jTransfer, privateRSAKey);
+            transfer.Signature = CoinTools.ECSign(jTransfer, privateECKey);
 
             return transfer;
         }
@@ -130,7 +148,7 @@ AgMBAAE=
             coin.HolderHash = null;
             string jCoin = JsonConvert.SerializeObject(coin);
 
-            if (CoinTools.Verify(jCoin, hh, publicRSAKey))
+            if (CoinTools.ECVerify(jCoin, hh, publicECKey))
                 Console.WriteLine("Holder Hash Verified");
             else
                 Console.WriteLine("Invalid Holder Hash");
@@ -153,7 +171,7 @@ AgMBAAE=
 
             string jCoin = JsonConvert.SerializeObject(coin);
 
-            if (CoinTools.Verify(jCoin, hash, publicRSAKey))
+            if (CoinTools.ECVerify(jCoin, hash, publicECKey))
                 Console.WriteLine("Issue Hash Verified");
             else
                 Console.WriteLine("Invalid Issue Hash");

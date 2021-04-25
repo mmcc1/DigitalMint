@@ -14,7 +14,7 @@ namespace LibMint
 
             for (int i = 0; i < coin.Holders.Count; i++)
             {
-                if (CoinTools.Verify(jTransfer, sig, coin.Holders[i].PublicKey))
+                if (CoinTools.ECVerify(jTransfer, sig, coin.Holders[i].PublicKey))
                     canTransfer = true;
             }
 
@@ -24,7 +24,7 @@ namespace LibMint
                 coin.Holders = transfer.Holders;
                 coin.HolderHash = null;
                 string jCoin = JsonConvert.SerializeObject(coin);
-                coin.HolderHash = CoinTools.Sign(jCoin, privateRSAKey);
+                coin.HolderHash = CoinTools.ECSign(jCoin, privateRSAKey);
             }
 
             return coin;

@@ -7,16 +7,16 @@ namespace LibMint
 {
     public class IssueCoin
     {
-        public Coin Create(string issuingAuthority, string countryCode, string currencyCode, decimal value, string privateRSAKey, string publicRSAKey)
+        public Coin Create(string issuingAuthority, string countryCode, string currencyCode, decimal value, string privateKey, string publicKey)
         {
             Coin coin = new Coin() { CountryCode = countryCode, IssueDate = DateTime.UtcNow, CurrencyCode = currencyCode, IssuingAuthority = issuingAuthority, SerialNumber = Guid.NewGuid(), Value = value, Holders = new List<Holder>() };
             
             string jCoin = JsonConvert.SerializeObject(coin);
-            coin.IssuingHash = CoinTools.Sign(jCoin, privateRSAKey);
+            coin.IssuingHash = CoinTools.ECSign(jCoin, privateKey);
 
-            coin.Holders.Add(new Holder() { PublicKey = publicRSAKey });
+            coin.Holders.Add(new Holder() { PublicKey = publicKey });
             jCoin = JsonConvert.SerializeObject(coin);
-            coin.HolderHash = CoinTools.Sign(jCoin, privateRSAKey);
+            coin.HolderHash = CoinTools.ECSign(jCoin, privateKey);
 
             return coin;
         }
