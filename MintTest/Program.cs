@@ -8,9 +8,9 @@ namespace MintTest
 {
     class Program
     {
-        /*
-        #region RSA Test Keys
 
+        #region RSA Test Keys
+        /*
         private static string privateRSAKey = @"-----BEGIN RSA PRIVATE KEY-----
 MIIEoQIBAAKCAQBkgS5bdHmfPFhLIOdxCpd/rEC92l1WvFr3cGUfySR2TP61whCj
 PXzCkxe4vs6uCKhfoRPiKQV7a24VxNb+QRkmryTzpFlJutNhfMeiuBJRu/yrp/b7
@@ -58,9 +58,10 @@ fPkusmaW0RrnSXosTtg1nA7Lcok4UIPquyKtQwEKw/k3QP/XgyuXyPqQB6rif59m
 jc6pz989OCVjHjIO3LFIqRWK3RZQGLt9e99GW7vzN21UoXsiJ9m3WojDbMU0yEqR
 AgMBAAE=
 -----END PUBLIC KEY-----";
-
-        #endregion
 */
+        #endregion
+
+        #region ECDSA Test Keys
 
         private static string privateECKey = @"-----BEGIN EC PRIVATE KEY-----
 MHQCAQEEILLwDgKayNil3RxMTtz6isgw9p3piPjzz7EuAqghwqsLoAcGBSuBBAAK
@@ -78,6 +79,8 @@ MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEHk9K8gPz1s3o0KLQPS4l3pU7qg3H50ww
 4ukkPJiao/5HLqTwowv9z0t3gMoQGnzU3tpW/BLoNwyMlLmog8wgXA==
 -----END PUBLIC KEY-----
 ";
+        #endregion
+
         static void Main(string[] args)
         {
             Coin coin = IssueCoin();  //Create a coin

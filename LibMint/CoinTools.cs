@@ -63,10 +63,10 @@ namespace LibMint
 
                 PemReader pemReader = new PemReader(new StringReader(privateKey));
                 AsymmetricCipherKeyPair keyPair = (AsymmetricCipherKeyPair)pemReader.ReadObject();
-                ECKeyParameters privateRSAKey = (ECKeyParameters)keyPair.Private;
+                ECKeyParameters privateECKey = (ECKeyParameters)keyPair.Private;
 
                 ISigner sig = SignerUtilities.GetSigner("Sha512WithECDSA");
-                sig.Init(true, privateRSAKey);
+                sig.Init(true, privateECKey);
                 sig.BlockUpdate(r, 0, r.Length);
                 byte[] signedBytes = sig.GenerateSignature();
 
@@ -87,10 +87,10 @@ namespace LibMint
 
                 PemReader pemReader = new PemReader(new StringReader(publicKey));
                 AsymmetricKeyParameter pKey = (AsymmetricKeyParameter)pemReader.ReadObject();
-                ECKeyParameters publicRSAKey = (ECKeyParameters)pKey;
+                ECKeyParameters publicECKey = (ECKeyParameters)pKey;
 
                 ISigner sig = SignerUtilities.GetSigner("Sha512WithECDSA");
-                sig.Init(false, publicRSAKey);
+                sig.Init(false, publicECKey);
                 sig.BlockUpdate(s, 0, s.Length);
                 return sig.VerifySignature(r);
             }
