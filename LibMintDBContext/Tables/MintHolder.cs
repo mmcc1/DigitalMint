@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LibMintDBContext.Tables
 {
@@ -8,5 +6,6 @@ namespace LibMintDBContext.Tables
     {
         public Guid Id { get; set; }
         public string PublicKey { get; set; }
+        public Guid MintCoinId { get; set; }
     }
 }

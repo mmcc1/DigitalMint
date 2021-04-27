@@ -20,10 +20,6 @@ oUQDQgAEze2Mh0XVtkiZ03rt5L0xIcQAEfxf75qjEO8C9fbVsJh1VDuOdESkNIIf
 0YlNAz2PJ9IQ0ovDf+pM4Yt/m2Bacw==
 -----END EC PRIVATE KEY-----";
 
-//        private string publicECKey = @"-----BEGIN PUBLIC KEY-----
-//MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEze2Mh0XVtkiZ03rt5L0xIcQAEfxf75qj
-//EO8C9fbVsJh1VDuOdESkNIIf0YlNAz2PJ9IQ0ovDf+pM4Yt/m2Bacw==
-//-----END PUBLIC KEY-----";
 
         [HttpPost(Name = "IssueCoin")]
         public async Task<IActionResult> IssueCoin(IssueCoinRequest issueCoinRequest)

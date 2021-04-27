@@ -1,6 +1,5 @@
 ﻿using LibMintDBContext.Tables;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace LibMintDBContext
 {
@@ -8,7 +7,6 @@ namespace LibMintDBContext
     {
         public DbSet<MintCoin> MintCoins { get; set; }
         public DbSet<MintHolder> MintHolders { get; set; }
-        public DbSet<MintTransfer> MintTransfers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

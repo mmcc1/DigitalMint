@@ -39,11 +39,22 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
             Coin coin = await IssueCoin();
             PrintCoinDetails("Coin Issued.", coin);
 
-            Console.WriteLine("Press ENTER to transfer.");
+            Console.WriteLine("Press ENTER to transfer coin.");
             Console.ReadLine();
 
             Coin transferredCoin = await TransferCoin(coin.SerialNumber, coin.IssuingAuthority, new List<string>() { transferPublicKey });
             PrintCoinDetails("Coin Transferred.", transferredCoin);
+
+            Console.WriteLine("Press ENTER to search for coin.");
+            Console.ReadLine();
+
+            List<Coin> coins = await SearchCoin(transferPublicKey);
+
+            for(int i = 0; i < coins.Count; i++)
+            {
+                Console.WriteLine(Environment.NewLine);
+                PrintCoinDetails("Found Coin.", coins[i]);
+            }
 
             Console.ReadLine();
         }
@@ -116,6 +127,37 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
 
                     if (response != null)
                         return JsonConvert.DeserializeObject<Coin>(await response.Content.ReadAsStringAsync());
+                    else
+                        throw new Exception();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    throw ex;
+                }
+            }
+        }
+
+        private static async Task<List<Coin>> SearchCoin(string publicKey)
+        {
+            Search search = new Search();
+            search.PublicKey = publicKey;
+
+            using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://localhost:44341/api/Search"))
+            {
+                request.Content = new StringContent(JsonConvert.SerializeObject(search));
+                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+                request.Headers.Add("x-api-key", "86A5DFC6-0EB7-4249-B32A-366F2F8F9A51");
+
+                HttpResponseMessage response = null;
+
+                try
+                {
+                    using (HttpClient client = new HttpClient())
+                        response = await client.SendAsync(request);
+
+                    if (response != null)
+                        return JsonConvert.DeserializeObject<List<Coin>>(await response.Content.ReadAsStringAsync());
                     else
                         throw new Exception();
                 }

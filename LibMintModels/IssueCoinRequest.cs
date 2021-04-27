@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace LibMintModels
 {
-    //"Bank of Digital", "UK", "GBP", 10.00M, privateECKey, publicECKey
     public class IssueCoinRequest
     {
         public string IssuingAuthority { get; set; }
