@@ -42,7 +42,7 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
             Console.WriteLine("Press ENTER to transfer.");
             Console.ReadLine();
 
-            Coin transferredCoin = await TransferCoin(coin.SerialNumber, new List<string>() { transferPublicKey });
+            Coin transferredCoin = await TransferCoin(coin.SerialNumber, coin.IssuingAuthority, new List<string>() { transferPublicKey });
             PrintCoinDetails("Coin Transferred.", transferredCoin);
 
             Console.ReadLine();
@@ -86,10 +86,11 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
             }  
         }
 
-        private static async Task<Coin> TransferCoin(Guid serialNumber, List<string> holdersPublicKey)
+        private static async Task<Coin> TransferCoin(Guid serialNumber, string issuingAuthority, List<string> holdersPublicKey)
         {
             Transfer transfer = new Transfer();
             transfer.SerialNumber = serialNumber;
+            transfer.IssuingAuthority = issuingAuthority;
             transfer.Timestamp = DateTime.UtcNow;
             transfer.Holders = new List<Holder>();
 

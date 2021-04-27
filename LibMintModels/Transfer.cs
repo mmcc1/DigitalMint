@@ -6,6 +6,7 @@ namespace LibMintModels
     public class Transfer
     {
         public List<Holder> Holders { get; set; }
+        public string IssuingAuthority { get; set; }
         public Guid SerialNumber { get; set; }
         public DateTime Timestamp { get; set; }
         public string Signature { get; set; }

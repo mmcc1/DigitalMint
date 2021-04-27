@@ -12,7 +12,7 @@ namespace LibMintDBContext
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=LibMint;User Id=libmint;Password=devpassword11;");
+            optionsBuilder.UseSqlServer(@"Server=127.0.0.1;Database=LibMint;User Id=libmint;Password=xxx;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
