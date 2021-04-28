@@ -17,9 +17,9 @@ namespace MintAPI.Controllers
     public class TransferController : ControllerBase
     {
         private string privateECKey = @"-----BEGIN EC PRIVATE KEY-----
-MHQCAQEEILLwDgKayNil3RxMTtz6isgw9p3piPjzz7EuAqghwqsLoAcGBSuBBAAK
-oUQDQgAEze2Mh0XVtkiZ03rt5L0xIcQAEfxf75qjEO8C9fbVsJh1VDuOdESkNIIf
-0YlNAz2PJ9IQ0ovDf+pM4Yt/m2Bacw==
+MHQCAQEEIFsl9XUq6Z6xnx/HNiKtUr8+8g/Ym2RtMns09Q9Z2JENoAcGBSuBBAAK
+oUQDQgAEJKZlnvyvg+F++rf6IcM/wT3W8Fyd0jt4foUUfjtwGHh1PllMoVY+dDBl
+w3UIU+3iq36ZZ3gindq175Dpfcy17g==
 -----END EC PRIVATE KEY-----";
 
         [HttpPost(Name = "TransferCoin")]

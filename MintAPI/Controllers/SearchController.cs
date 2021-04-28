@@ -1,8 +1,10 @@
-﻿using LibMintDBContext;
+﻿using LibMint;
+using LibMintDBContext;
 using LibMintDBContext.Tables;
 using LibMintModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +20,12 @@ namespace MintAPI.Controllers
         [HttpPost(Name = "SearchCoin")]
         public async Task<IActionResult> SearchCoin(Search search)
         {
+            string sig = search.Signature;
+            search.Signature = null;
+
+            if (!CoinTools.ECVerify(JsonConvert.SerializeObject(search), sig, search.PublicKey))
+                return NotFound();
+
             MintDBContext db = new MintDBContext();
 
             List<Guid> mc = await db.MintHolders.Where(x => x.PublicKey == search.PublicKey).Select(x => x.MintCoinId).ToListAsync();

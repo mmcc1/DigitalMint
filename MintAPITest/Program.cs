@@ -14,21 +14,26 @@ namespace MintAPITest
         #region ECDSA Test Keys
 
         private static string privateECKey = @"-----BEGIN EC PRIVATE KEY-----
-MHQCAQEEILLwDgKayNil3RxMTtz6isgw9p3piPjzz7EuAqghwqsLoAcGBSuBBAAK
-oUQDQgAEze2Mh0XVtkiZ03rt5L0xIcQAEfxf75qjEO8C9fbVsJh1VDuOdESkNIIf
-0YlNAz2PJ9IQ0ovDf+pM4Yt/m2Bacw==
+MHQCAQEEIFsl9XUq6Z6xnx/HNiKtUr8+8g/Ym2RtMns09Q9Z2JENoAcGBSuBBAAK
+oUQDQgAEJKZlnvyvg+F++rf6IcM/wT3W8Fyd0jt4foUUfjtwGHh1PllMoVY+dDBl
+w3UIU+3iq36ZZ3gindq175Dpfcy17g==
 -----END EC PRIVATE KEY-----";
 
         private static string publicECKey = @"-----BEGIN PUBLIC KEY-----
-        MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEze2Mh0XVtkiZ03rt5L0xIcQAEfxf75qj
-        EO8C9fbVsJh1VDuOdESkNIIf0YlNAz2PJ9IQ0ovDf+pM4Yt/m2Bacw==
-        -----END PUBLIC KEY-----";
+MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEJKZlnvyvg+F++rf6IcM/wT3W8Fyd0jt4
+foUUfjtwGHh1PllMoVY+dDBlw3UIU+3iq36ZZ3gindq175Dpfcy17g==
+-----END PUBLIC KEY-----";
+
+        private static string transferPrivateKey = @"-----BEGIN EC PRIVATE KEY-----
+MHQCAQEEIL2UJl3yXLMkM3HLBHk5mk3fp+n4Pk9crMfNF41mFcecoAcGBSuBBAAK
+oUQDQgAEKNuT1qkJTXEIKqHe6JfPbE+W0IyqZb1oDXlqtGxOoljpJ7a9TRkeAm9o
+BgjOBx1K4SvZf7WCvfA8NjrBpAwirQ==
+-----END EC PRIVATE KEY-----";
 
         private static string transferPublicKey = @"-----BEGIN PUBLIC KEY-----
-MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAExqbGohLO0Go0n8T0N0FZ9yO+WIduen9R
-vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
------END PUBLIC KEY-----
-";
+MFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEKNuT1qkJTXEIKqHe6JfPbE+W0IyqZb1o
+DXlqtGxOoljpJ7a9TRkeAm9oBgjOBx1K4SvZf7WCvfA8NjrBpAwirQ==
+-----END PUBLIC KEY-----";
         #endregion
 
         static async Task Main(string[] args)
@@ -39,12 +44,14 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
             Coin coin = await IssueCoin();
             PrintCoinDetails("Coin Issued.", coin);
 
+            Console.WriteLine(Environment.NewLine);
             Console.WriteLine("Press ENTER to transfer coin.");
             Console.ReadLine();
 
             Coin transferredCoin = await TransferCoin(coin.SerialNumber, coin.IssuingAuthority, new List<string>() { transferPublicKey });
             PrintCoinDetails("Coin Transferred.", transferredCoin);
 
+            Console.WriteLine(Environment.NewLine);
             Console.WriteLine("Press ENTER to search for coin.");
             Console.ReadLine();
 
@@ -60,6 +67,8 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
         }
 
         #region Mint Methods
+
+        #region Issue Coin
 
         private static async Task<Coin> IssueCoin()
         {
@@ -96,6 +105,10 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
                 }
             }  
         }
+
+        #endregion
+
+        #region Transfer Coin
 
         private static async Task<Coin> TransferCoin(Guid serialNumber, string issuingAuthority, List<string> holdersPublicKey)
         {
@@ -138,10 +151,16 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
             }
         }
 
+        #endregion
+
+        #region Search Coin
+
         private static async Task<List<Coin>> SearchCoin(string publicKey)
         {
             Search search = new Search();
             search.PublicKey = publicKey;
+            search.Timestamp = DateTime.UtcNow;
+            search.Signature = CoinTools.ECSign(JsonConvert.SerializeObject(search), transferPrivateKey);
 
             using (var request = new HttpRequestMessage(new HttpMethod("POST"), "https://localhost:44341/api/Search"))
             {
@@ -168,6 +187,8 @@ vL44upPLty5RHLf7TEdFavwezAyv2Lyr7Qc3mqwbh/wQDXjeo/K8ow==
                 }
             }
         }
+
+        #endregion
 
         #endregion
 
