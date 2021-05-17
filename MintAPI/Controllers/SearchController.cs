@@ -42,6 +42,7 @@ namespace MintAPI.Controllers
                 Coin coin = new Coin();
                 coin.CountryCode = mccoins[i].CountryCode;
                 coin.CurrencyCode = mccoins[i].CurrencyCode;
+                coin.PurposeCode = mccoins[i].PurposeCode;
                 coin.HolderHash = mccoins[i].HolderHash;
                 coin.Holders = new List<Holder>();
                 coin.IssueDate = mccoins[i].IssueDate;

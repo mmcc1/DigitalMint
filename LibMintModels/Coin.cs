@@ -9,6 +9,7 @@ namespace LibMintModels
         public Guid SerialNumber { get; set; }
         public string CountryCode { get; set; }
         public string CurrencyCode { get; set; }
+        public string PurposeCode { get; set; }
         public decimal Value { get; set; }
         public string IssuingHash { get; set; }
         public DateTime IssueDate { get; set; }

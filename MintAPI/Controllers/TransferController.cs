@@ -32,6 +32,7 @@ w3UIU+3iq36ZZ3gindq175Dpfcy17g==
 
             coin.CountryCode = mc.CountryCode;
             coin.CurrencyCode = mc.CurrencyCode;
+            coin.PurposeCode = mc.PurposeCode;
             coin.HolderHash = mc.HolderHash;
             coin.IssueDate = mc.IssueDate;
             coin.IssuingAuthority = mc.IssuingAuthority;
@@ -65,6 +66,7 @@ w3UIU+3iq36ZZ3gindq175Dpfcy17g==
                 CountryCode = transferredCoin.CountryCode,
                 CurrencyCode = transferredCoin.CurrencyCode,
                 HolderHash = transferredCoin.HolderHash,
+                PurposeCode = transferredCoin.PurposeCode,
                 Id = Guid.NewGuid(),
                 IssueDate = DateTime.UtcNow,
                 IssuingAuthority = transferredCoin.IssuingAuthority,

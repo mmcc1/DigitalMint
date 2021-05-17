@@ -76,6 +76,7 @@ DXlqtGxOoljpJ7a9TRkeAm9oBgjOBx1K4SvZf7WCvfA8NjrBpAwirQ==
             icr.CountryCode = "UK";
             icr.CurrencyCode = "GBP";
             icr.IssuingAuthority = "Bank of Digital";
+            icr.PurposeCode = "General";
             icr.Value = 10.00M;
             icr.HolderPublicKeys = new List<string>();
             icr.HolderPublicKeys.Add(publicECKey);
@@ -202,6 +203,7 @@ DXlqtGxOoljpJ7a9TRkeAm9oBgjOBx1K4SvZf7WCvfA8NjrBpAwirQ==
             Console.WriteLine("Issuing Country: " + coin.CountryCode);
             Console.WriteLine("Serial Number: " + coin.SerialNumber);
             Console.WriteLine("CurrencyCode: " + coin.CurrencyCode);
+            Console.WriteLine("PurposeCode: " + coin.PurposeCode);
             Console.WriteLine("Value: " + coin.Value);
             Console.WriteLine("Issuing Date: " + coin.IssueDate);
             Console.WriteLine(Environment.NewLine);

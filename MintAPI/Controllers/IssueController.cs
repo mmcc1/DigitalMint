@@ -25,13 +25,14 @@ w3UIU+3iq36ZZ3gindq175Dpfcy17g==
         public async Task<IActionResult> IssueCoin(IssueCoinRequest issueCoinRequest)
         {
             IssueCoin iC = new IssueCoin();
-            Coin coin = iC.Create(issueCoinRequest.IssuingAuthority, issueCoinRequest.CountryCode, issueCoinRequest.CurrencyCode, issueCoinRequest.Value, privateECKey, issueCoinRequest.HolderPublicKeys);
+            Coin coin = iC.Create(issueCoinRequest.IssuingAuthority, issueCoinRequest.CountryCode, issueCoinRequest.CurrencyCode, issueCoinRequest.PurposeCode, issueCoinRequest.Value, privateECKey, issueCoinRequest.HolderPublicKeys);
             MintDBContext db = new MintDBContext();
 
             MintCoin mc = new MintCoin()
             {
                 CountryCode = coin.CountryCode,
                 CurrencyCode = coin.CurrencyCode,
+                PurposeCode = coin.PurposeCode,
                 HolderHash = coin.HolderHash,
                 Id = Guid.NewGuid(),
                 IssueDate = DateTime.UtcNow,

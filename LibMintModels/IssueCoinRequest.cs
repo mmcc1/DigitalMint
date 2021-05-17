@@ -7,6 +7,7 @@ namespace LibMintModels
         public string IssuingAuthority { get; set; }
         public string CountryCode { get; set; }
         public string CurrencyCode { get; set; }
+        public string PurposeCode { get; set; }
         public decimal Value { get; set; }
         public List<string> HolderPublicKeys { get; set; }
     }
